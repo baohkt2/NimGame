@@ -21,7 +21,7 @@ public class GameStateModel {
     private int historyIndex;
     private Boolean isNormalPlay;
     private Boolean takeFirst;
-    
+
     public GameStateModel() {
     }
 
@@ -88,7 +88,7 @@ public class GameStateModel {
     public void setTakeFirst(Boolean takeFirst) {
         this.takeFirst = takeFirst;
     }
-  
+
     public int getHistoryIndex() {
         return historyIndex;
     }

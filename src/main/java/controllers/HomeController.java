@@ -77,7 +77,7 @@ public class HomeController implements HomeInterface, NavigationInterface {
     }
 
     @Override
-    public void NewGamePvM(Boolean takesFirst) {       
+    public void NewGamePvM(Boolean takesFirst) {
         randomSticksInRow(); // Tạo số que ngẫu nhiên trong hàng
         gameStateModel.setTakeFirst(takesFirst); // Thiết lập người đi trước
         player1 = new PlayerModel(namePlayer1, false, takesFirst); // Khởi tạo người chơi 1
@@ -94,7 +94,6 @@ public class HomeController implements HomeInterface, NavigationInterface {
         }
         NewGame(); // Bắt đầu trò chơi mới
     }
-
 
     public void launch() {
         showHome(); // Hiển thị giao diện chính
@@ -148,7 +147,7 @@ public class HomeController implements HomeInterface, NavigationInterface {
 
         // Kiểm tra xem tệp có tồn tại trước khi cố gắng đọc
         if (!Files.exists(path)) {
-            System.out.println("Tệp lưu trò chơi không tồn tại tại: " + path.toString());
+            //    System.out.println("Tệp lưu trò chơi không tồn tại tại: " + path.toString());
             return; // Thoát nếu tệp không tồn tại
         }
 
@@ -197,11 +196,11 @@ public class HomeController implements HomeInterface, NavigationInterface {
                         gameStateModel.setHistoryTaken(historyList); // Lưu lịch sử
                         break;
                     default:
-                        System.out.println("Khóa không xác định: " + key); // Xử lý khóa không xác định
+                        //        System.out.println("Khóa không xác định: " + key); // Xử lý khóa không xác định
                         break;
                 }
             }
-            System.out.println("Trò chơi đã được tải thành công!");
+            //    System.out.println("Trò chơi đã được tải thành công!");
         } catch (IOException e) {
             System.out.println("Lỗi khi đọc trò chơi: " + e.getMessage());
             e.printStackTrace(); // In thông tin lỗi để gỡ lỗi
@@ -228,10 +227,10 @@ public class HomeController implements HomeInterface, NavigationInterface {
             // Tạo tệp chỉ khi nó chưa tồn tại
             if (!Files.exists(path)) {
                 Files.createFile(path);
-                System.out.println("Tệp đã được tạo tại: " + path.toString());
+                //    System.out.println("Tệp đã được tạo tại: " + path.toString());
             }
         } catch (IOException e) {
-            System.out.println("Lỗi khi tạo tệp hoặc thư mục: " + e.getMessage());
+            //    System.out.println("Lỗi khi tạo tệp hoặc thư mục: " + e.getMessage());
             e.printStackTrace(); // In thông tin lỗi để gỡ lỗi
             return; // Thoát nếu có lỗi
         }
@@ -246,13 +245,12 @@ public class HomeController implements HomeInterface, NavigationInterface {
             // Ghi quy tắc trò chơi
             writer.write("GameRules: " + gameModel.isNormalPlay() + "\n");
 
-            System.out.println("Cài đặt đã được lưu thành công!");
+            //   System.out.println("Cài đặt đã được lưu thành công!");
         } catch (IOException e) {
-            System.out.println("Lỗi khi lưu cài đặt: " + e.getMessage());
+            //    System.out.println("Lỗi khi lưu cài đặt: " + e.getMessage());
             e.printStackTrace(); // In thông tin lỗi để gỡ lỗi
         }
     }
-
 
     private void ReadSetting() {
         Path path = Paths.get("src/main/resources/database/Setting.txt"); // Đường dẫn đến tệp cài đặt
@@ -290,7 +288,7 @@ public class HomeController implements HomeInterface, NavigationInterface {
                         break;
                     case "GameRules":
                         gameModel.setIsNormalPlay(Boolean.parseBoolean(value)); // Thiết lập quy tắc trò chơi
-                        break; 
+                        break;
                     default:
                         System.out.println("Lỗi đọc giá trị: " + key); // Xử lý khóa không xác định
                         break;

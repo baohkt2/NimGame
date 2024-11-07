@@ -9,8 +9,12 @@ package interfaces;
  * @author ASUS
  */
 public interface NavigationInterface {
+
     void showHome();
+
     void hideHome();
+
     void showGamePlay();
+
     void hideGamePlay();
 }

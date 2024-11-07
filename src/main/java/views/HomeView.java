@@ -529,8 +529,8 @@ public class HomeView extends javax.swing.JFrame {
 
     private void btn_pvmMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_pvmMouseClicked
         // TODO add your handling code here:
-       layerTakeFirst.setVisible(true);
-       layerGameMode.setVisible(false);
+        layerTakeFirst.setVisible(true);
+        layerGameMode.setVisible(false);
     }//GEN-LAST:event_btn_pvmMouseClicked
 
     private void btn_continueMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_continueMouseClicked
@@ -726,7 +726,7 @@ public class HomeView extends javax.swing.JFrame {
 
     private void btn_backAfterSetMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_backAfterSetMouseExited
         // TODO add your handling code here:
-         btnMouseExited(btn_backAfterSet, lb_backAfterSet);
+        btnMouseExited(btn_backAfterSet, lb_backAfterSet);
     }//GEN-LAST:event_btn_backAfterSetMouseExited
 
     private void btn_machineFirstMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_machineFirstMouseEntered
@@ -741,12 +741,12 @@ public class HomeView extends javax.swing.JFrame {
 
     private void btn_playerFirstMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_playerFirstMouseEntered
         // TODO add your handling code here:
-        btnMouseEntered( btn_playerFirst,  lb_playerFirst);
+        btnMouseEntered(btn_playerFirst, lb_playerFirst);
     }//GEN-LAST:event_btn_playerFirstMouseEntered
 
     private void btn_playerFirstMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_playerFirstMouseExited
         // TODO add your handling code here:
-        btnMouseExited(btn_playerFirst,  lb_playerFirst);
+        btnMouseExited(btn_playerFirst, lb_playerFirst);
     }//GEN-LAST:event_btn_playerFirstMouseExited
 
     private void btn_back1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_back1MouseEntered
@@ -756,7 +756,7 @@ public class HomeView extends javax.swing.JFrame {
 
     private void btn_back1MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_back1MouseExited
         // TODO add your handling code here:
-         btnMouseExited(btn_back1, lb_back1);
+        btnMouseExited(btn_back1, lb_back1);
     }//GEN-LAST:event_btn_back1MouseExited
 
     private void btn_machineFirstMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_machineFirstMouseClicked
@@ -768,7 +768,7 @@ public class HomeView extends javax.swing.JFrame {
     private void btn_playerFirstMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_playerFirstMouseClicked
         // TODO add your handling code here:
         homeInterface.NewGamePvM(true);
-        backHome();      
+        backHome();
     }//GEN-LAST:event_btn_playerFirstMouseClicked
 
     private void btn_back1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_back1MouseClicked

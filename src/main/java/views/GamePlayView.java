@@ -348,7 +348,7 @@ public class GamePlayView extends javax.swing.JFrame {
         scrollGameState.setVisible(true);
         panelNavigative.setVisible(true);
         panelOverGame.setVisible(false);
-        gamePlayInterface.playAgain();      
+        gamePlayInterface.playAgain();
         initHistoryTaken();
         refresh();
     }//GEN-LAST:event_btn_playAgainMouseClicked
@@ -446,261 +446,263 @@ public class GamePlayView extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     private void initStatePanel() {
-    // Thiết lập layout cho panelGameState
-    panelGameState.setLayout(new BoxLayout(panelGameState, BoxLayout.Y_AXIS));
-    panelGameState.setBackground(Color.WHITE);
+        // Thiết lập layout cho panelGameState
+        panelGameState.setLayout(new BoxLayout(panelGameState, BoxLayout.Y_AXIS));
+        panelGameState.setBackground(Color.WHITE);
 
-    rows = new ArrayList<>(); // Khởi tạo danh sách chứa các hàng
+        rows = new ArrayList<>(); // Khởi tạo danh sách chứa các hàng
 
-    panelGameState.removeAll(); // Xóa tất cả các thành phần hiện có
-    for (int i = 0; i < numberOfRows; i++) {
-        JPanel rowPanel = new JPanel();
-        rowPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-        List<JLabel> rowLabels = new ArrayList<>();
+        panelGameState.removeAll(); // Xóa tất cả các thành phần hiện có
+        for (int i = 0; i < numberOfRows; i++) {
+            JPanel rowPanel = new JPanel();
+            rowPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+            List<JLabel> rowLabels = new ArrayList<>();
 
-        // Tạo nhãn cho mỗi que trong hàng
-        for (int j = 0; j < SticksInRow[i]; j++) {
-            ImageIcon icon = new ImageIcon(getClass().getResource("/images/STICK.png"));
-            JLabel label = new JLabel();
-            label.setIcon(icon);
-            label.setBorder(BorderFactory.createEmptyBorder()); // Viền mặc định
-            label.addMouseListener(new LabelClickListener(i, label)); // Thêm sự kiện click
-            rowPanel.add(label);
-            rowLabels.add(label);
-        }
-        panelGameState.add(rowPanel); // Thêm hàng vào panelGameState
-        rows.add(rowLabels); // Lưu danh sách nhãn của hàng
-    }
-}
-
-public void doHint(int currentRow, int disabledCount) {
-    refresh(); // Làm mới giao diện
-    this.currentRow = currentRow; // Lưu hàng hiện tại
-    this.disabledCount = disabledCount; // Lưu số lượng que đã bị vô hiệu hóa
-    disableOtherRows(currentRow); // Vô hiệu hóa các hàng khác
-
-    if (spn_quatity.isEnabled()) {
-        List<JLabel> rowLabels = rows.get(currentRow);
-        for (JLabel label : rowLabels) {
-            if (label.isEnabled()) {
-                label.setEnabled(false); // Vô hiệu hóa nhãn
-                label.setBorder(BorderFactory.createLineBorder(Color.RED)); // Đổi viền thành đỏ
+            // Tạo nhãn cho mỗi que trong hàng
+            for (int j = 0; j < SticksInRow[i]; j++) {
+                ImageIcon icon = new ImageIcon(getClass().getResource("/images/STICK.png"));
+                JLabel label = new JLabel();
+                label.setIcon(icon);
+                label.setBorder(BorderFactory.createEmptyBorder()); // Viền mặc định
+                label.addMouseListener(new LabelClickListener(i, label)); // Thêm sự kiện click
+                rowPanel.add(label);
+                rowLabels.add(label);
             }
+            panelGameState.add(rowPanel); // Thêm hàng vào panelGameState
+            rows.add(rowLabels); // Lưu danh sách nhãn của hàng
         }
-        this.updateSPN_Quatity(); // Cập nhật giá trị cho spinner
     }
-}
+
+    public void doHint(int currentRow, int disabledCount) {
+        refresh(); // Làm mới giao diện
+        this.currentRow = currentRow; // Lưu hàng hiện tại
+        this.disabledCount = disabledCount; // Lưu số lượng que đã bị vô hiệu hóa
+        disableOtherRows(currentRow); // Vô hiệu hóa các hàng khác
+
+        if (spn_quatity.isEnabled()) {
+            List<JLabel> rowLabels = rows.get(currentRow);
+            for (JLabel label : rowLabels) {
+                if (label.isEnabled()) {
+                    label.setEnabled(false); // Vô hiệu hóa nhãn
+                    label.setBorder(BorderFactory.createLineBorder(Color.RED)); // Đổi viền thành đỏ
+                }
+            }
+            this.updateSPN_Quatity(); // Cập nhật giá trị cho spinner
+        }
+    }
 
 // Listener xử lý sự kiện click cho nhãn
-private class LabelClickListener extends MouseAdapter {
-    private int rowIndex; // Chỉ số hàng
-    private JLabel label; // Nhãn
+    private class LabelClickListener extends MouseAdapter {
 
-    public LabelClickListener(int rowIndex, JLabel label) {
-        this.rowIndex = rowIndex;
-        this.label = label;
-    }
+        private int rowIndex; // Chỉ số hàng
+        private JLabel label; // Nhãn
 
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        if (label.isEnabled()) {
-            // Nếu nhãn đang enabled, chuyển nó sang disabled
-            label.setEnabled(false);
-            label.setBorder(BorderFactory.createLineBorder(Color.RED)); // Đổi viền thành đỏ
-            disableOtherRows(rowIndex); // Vô hiệu hóa các hàng khác
-
-            // Cập nhật số lượng `disabled` của hàng và spinner
-            disabledCount++;
-            updateSPN_Quatity();
-        } else {
-            // Nếu nhãn đang disabled, khôi phục lại nó
-            disabledCount--;
-            label.setEnabled(true);
-            label.setBorder(BorderFactory.createEmptyBorder()); // Khôi phục viền
-            checkAndEnableAllRows(); // Kiểm tra và khôi phục trạng thái enabled nếu cần
+        public LabelClickListener(int rowIndex, JLabel label) {
+            this.rowIndex = rowIndex;
+            this.label = label;
         }
-    }
-}
 
-// Vô hiệu hóa tất cả các hàng khác, trừ hàng được click
-private void disableOtherRows(int rowIndex) {
-    this.currentRow = rowIndex; // Lưu hàng hiện tại
-    for (int i = 0; i < rows.size(); i++) {
-        if (i != rowIndex) {
-            for (JLabel label : rows.get(i)) {
-                label.setEnabled(false); // Vô hiệu hóa nhãn
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            if (label.isEnabled()) {
+                // Nếu nhãn đang enabled, chuyển nó sang disabled
+                label.setEnabled(false);
+                label.setBorder(BorderFactory.createLineBorder(Color.RED)); // Đổi viền thành đỏ
+                disableOtherRows(rowIndex); // Vô hiệu hóa các hàng khác
+
+                // Cập nhật số lượng `disabled` của hàng và spinner
+                disabledCount++;
+                updateSPN_Quatity();
+            } else {
+                // Nếu nhãn đang disabled, khôi phục lại nó
+                disabledCount--;
+                label.setEnabled(true);
+                label.setBorder(BorderFactory.createEmptyBorder()); // Khôi phục viền
+                checkAndEnableAllRows(); // Kiểm tra và khôi phục trạng thái enabled nếu cần
             }
         }
     }
-}
 
-// Kiểm tra nếu tất cả nhãn trong hàng đều enabled thì kích hoạt lại tất cả các hàng
-private void checkAndEnableAllRows() {
-    if (disabledCount == 0) {
-        refresh(); // Làm mới giao diện nếu không có que nào bị vô hiệu hóa
-    }
-}
-
-public void refresh() {
-    int rowIndex = 0;
-    String namePlayer = gamePlayInterface.getNamePlayerCanTake(); // Lấy tên người chơi hiện tại
-
-    txt_namePlayer.setText(namePlayer); // Cập nhật tên người chơi
-    for (List<JLabel> row : rows) {
-        int numberOfSticksTakenInRow = gamePlayInterface.getNumberOfSticksTakenInRow(rowIndex++);
-        for (JLabel label : row) {
-            label.setEnabled(numberOfSticksTakenInRow-- <= 0); // Kích hoạt hoặc vô hiệu hóa label.setBorder(BorderFactory.createEmptyBorder()); // Khôi phục viền
-            label.setBorder(BorderFactory.createEmptyBorder()); // Xóa viền đỏ nếu có
+// Vô hiệu hóa tất cả các hàng khác, trừ hàng được click
+    private void disableOtherRows(int rowIndex) {
+        this.currentRow = rowIndex; // Lưu hàng hiện tại
+        for (int i = 0; i < rows.size(); i++) {
+            if (i != rowIndex) {
+                for (JLabel label : rows.get(i)) {
+                    label.setEnabled(false); // Vô hiệu hóa nhãn
+                }
+            }
         }
     }
 
-    disabledCount = 0; // Đặt lại số lượng que đã bị vô hiệu hóa
-    this.currentRow = -1; // Đặt lại hàng hiện tại
-}
-
-public void setViewForAI(Boolean isEnable) {
-    lb_waiting.setVisible(isEnable); // Hiển thị hoặc ẩn thông báo chờ
-    spn_quatity.setEnabled(!isEnable); // Kích hoạt hoặc vô hiệu hóa spinner
-    btn_cancel.setEnabled(!isEnable); // Kích hoạt hoặc vô hiệu hóa nút hủy
-}
-
-private void initHistoryTaken() {
-    // Thiết lập layout cho panelHistoryTaken
-    panelHistoryTaken.setLayout(new BoxLayout(panelHistoryTaken, BoxLayout.Y_AXIS));
-    panelHistoryTaken.setBackground(Color.WHITE);
-
-    String[] listHistory = gamePlayInterface.getHistoryTaken(); // Lấy lịch sử đã thực hiện
-
-    panelHistoryTaken.removeAll(); // Xóa tất cả các thành phần hiện có
-    // Tạo nhãn cho mỗi mục trong lịch sử
-    for (String history : listHistory) {
-        JLabel historyLabel = new JLabel(history); // Tạo một JLabel cho mục
-        panelHistoryTaken.add(historyLabel); // Thêm JLabel vào panel
+// Kiểm tra nếu tất cả nhãn trong hàng đều enabled thì kích hoạt lại tất cả các hàng
+    private void checkAndEnableAllRows() {
+        if (disabledCount == 0) {
+            refresh(); // Làm mới giao diện nếu không có que nào bị vô hiệu hóa
+        }
     }
 
-    // Làm mới panel để hiển thị lịch sử ban đầu
-    panelHistoryTaken.revalidate(); // Xác thực lại layout
-    panelHistoryTaken.repaint(); // Vẽ lại panel để phản ánh thay đổi
-}
+    public void refresh() {
+        int rowIndex = 0;
+        String namePlayer = gamePlayInterface.getNamePlayerCanTake(); // Lấy tên người chơi hiện tại
 
-public void updateHistoryTaken() {
-    // Lấy lịch sử mới nhất từ logic trò chơi
-    String[] listHistory = gamePlayInterface.getHistoryTaken();
+        txt_namePlayer.setText(namePlayer); // Cập nhật tên người chơi
+        for (List<JLabel> row : rows) {
+            int numberOfSticksTakenInRow = gamePlayInterface.getNumberOfSticksTakenInRow(rowIndex++);
+            for (JLabel label : row) {
+                label.setEnabled(numberOfSticksTakenInRow-- <= 0); // Kích hoạt hoặc vô hiệu hóa label.setBorder(BorderFactory.createEmptyBorder()); // Khôi phục viền
+                label.setBorder(BorderFactory.createEmptyBorder()); // Xóa viền đỏ nếu có
+            }
+        }
 
-    // Kiểm tra nếu mảng lịch sử không rỗng
-    if (listHistory.length > 0) {
-        // Lấy mục lịch sử cuối cùng
-        String history = listHistory[listHistory.length - 1];
-        JLabel historyLabel = new JLabel(history); // Tạo một JLabel cho mục mới
-        panelHistoryTaken.add(historyLabel); // Thêm JLabel vào panel
+        disabledCount = 0; // Đặt lại số lượng que đã bị vô hiệu hóa
+        this.currentRow = -1; // Đặt lại hàng hiện tại
+    }
+
+    public void setViewForAI(Boolean isEnable) {
+        lb_waiting.setVisible(isEnable); // Hiển thị hoặc ẩn thông báo chờ
+        spn_quatity.setEnabled(!isEnable); // Kích hoạt hoặc vô hiệu hóa spinner
+        btn_cancel.setEnabled(!isEnable); // Kích hoạt hoặc vô hiệu hóa nút hủy
+    }
+
+    private void initHistoryTaken() {
+        // Thiết lập layout cho panelHistoryTaken
+        panelHistoryTaken.setLayout(new BoxLayout(panelHistoryTaken, BoxLayout.Y_AXIS));
+        panelHistoryTaken.setBackground(Color.WHITE);
+
+        String[] listHistory = gamePlayInterface.getHistoryTaken(); // Lấy lịch sử đã thực hiện
+
+        panelHistoryTaken.removeAll(); // Xóa tất cả các thành phần hiện có
+        // Tạo nhãn cho mỗi mục trong lịch sử
+        for (String history : listHistory) {
+            JLabel historyLabel = new JLabel(history); // Tạo một JLabel cho mục
+            panelHistoryTaken.add(historyLabel); // Thêm JLabel vào panel
+        }
+
+        // Làm mới panel để hiển thị lịch sử ban đầu
+        panelHistoryTaken.revalidate(); // Xác thực lại layout
+        panelHistoryTaken.repaint(); // Vẽ lại panel để phản ánh thay đổi
+    }
+
+    public void updateHistoryTaken() {
+        // Lấy lịch sử mới nhất từ logic trò chơi
+        String[] listHistory = gamePlayInterface.getHistoryTaken();
+
+        // Kiểm tra nếu mảng lịch sử không rỗng
+        if (listHistory.length > 0) {
+            // Lấy mục lịch sử cuối cùng
+            String history = listHistory[listHistory.length - 1];
+            JLabel historyLabel = new JLabel(history); // Tạo một JLabel cho mục mới
+            panelHistoryTaken.add(historyLabel); // Thêm JLabel vào panel
+
+            // Làm mới panel để hiển thị lịch sử đã cập nhật
+            panelHistoryTaken.revalidate(); // Xác thực lại layout
+            panelHistoryTaken.repaint(); // Vẽ lại panel để phản ánh thay đổi
+
+            // Tự động cuộn đến mục cuối cùng sau khi cập nhật panel
+            SwingUtilities.invokeLater(() -> {
+                JScrollBar verticalScrollBar = ((JScrollPane) panelHistoryTaken.getParent().getParent()).getVerticalScrollBar();
+                verticalScrollBar.setValue(verticalScrollBar.getMaximum()); // Cuộn xuống dưới cùng
+            });
+        } else {
+            // Xử lý trường hợp không có lịch sử
+            System.out.println("Không có lịch sử để cập nhật."); // Thông báo gỡ lỗi
+        }
+    }
+
+    private void undoHistoryTaken() {
+        gamePlayInterface.undoSticksTaken(); // Hoàn tác hành động đã thực hiện
+
+        // Xóa nhãn cuối cùng khỏi panel
+        Component[] components = panelHistoryTaken.getComponents();
+        if (components.length > 0) {
+            panelHistoryTaken.remove(components[components.length - 1]); // Xóa thành phần cuối cùng
+        }
 
         // Làm mới panel để hiển thị lịch sử đã cập nhật
         panelHistoryTaken.revalidate(); // Xác thực lại layout
         panelHistoryTaken.repaint(); // Vẽ lại panel để phản ánh thay đổi
-
-        // Tự động cuộn đến mục cuối cùng sau khi cập nhật panel
-        SwingUtilities.invokeLater(() -> {
-            JScrollBar verticalScrollBar = ((JScrollPane) panelHistoryTaken.getParent().getParent()).getVerticalScrollBar();
-            verticalScrollBar.setValue(verticalScrollBar.getMaximum()); // Cuộn xuống dưới cùng
-        });
-    } else {
-        // Xử lý trường hợp không có lịch sử
-        System.out.println("Không có lịch sử để cập nhật."); // Thông báo gỡ lỗi
-    }
-}
-
-private void undoHistoryTaken() {
-    gamePlayInterface.undoSticksTaken(); // Hoàn tác hành động đã thực hiện
-
-    // Xóa nhãn cuối cùng khỏi panel
-    Component[] components = panelHistoryTaken.getComponents();
-    if (components.length > 0) {
-        panelHistoryTaken.remove(components[components.length - 1]); // Xóa thành phần cuối cùng
     }
 
-    // Làm mới panel để hiển thị lịch sử đã cập nhật
-    panelHistoryTaken.revalidate(); // Xác thực lại layout
-    panelHistoryTaken.repaint(); // Vẽ lại panel để phản ánh thay đổi
-}
+    public void doTurn() {
+        if (spn_quatity.isEnabled() && currentRow != -1) {
+            int targetDisabled = (int) spn_quatity.getValue(); // Lấy số lượng que mục tiêu
+            List<JLabel> rowLabels = rows.get(currentRow); // Lấy nhãn hàng hiện tại
+            int currentDisabledCount = disabledCount; // Lấy số lượng que đã bị vô hiệu hóa hiện tại
 
-public void doTurn() {
-    if (spn_quatity.isEnabled() && currentRow != -1) {
-        int targetDisabled = (int) spn_quatity.getValue(); // Lấy số lượng que mục tiêu
-        List<JLabel> rowLabels = rows.get(currentRow); // Lấy nhãn hàng hiện tại
-        int currentDisabledCount = disabledCount; // Lấy số lượng que đã bị vô hiệu hóa hiện tại
+            changeLabelStatus(rowLabels, targetDisabled, currentDisabledCount); // Thay đổi trạng thái nhãn
 
-        changeLabelStatus(rowLabels, targetDisabled, currentDisabledCount); // Thay đổi trạng thái nhãn
-
-        // Gọi takeSticks dựa trên trạng thái mới
-        if (currentDisabledCount < targetDisabled || currentDisabledCount > targetDisabled) {
-            takeSticks(targetDisabled); // Lấy que theo số lượng mục tiêu
+            // Gọi takeSticks dựa trên trạng thái mới
+            if (currentDisabledCount < targetDisabled || currentDisabledCount > targetDisabled) {
+                takeSticks(targetDisabled); // Lấy que theo số lượng mục tiêu
+            } else {
+                takeSticks(currentDisabledCount); // Lấy que theo số lượng hiện tại
+            }
         } else {
-            takeSticks(currentDisabledCount); // Lấy que theo số lượng hiện tại
+            takeSticks(disabledCount); // Lấy que theo số lượng đã bị vô hiệu hóa
         }
-    } else {
-        takeSticks(disabledCount); // Lấy que theo số lượng đã bị vô hiệu hóa
-    }      
-}
+    }
 
-private void changeLabelStatus(List<JLabel> rowLabels, int targetDisabled, int currentDisabledCount) {
-    if (currentDisabledCount < targetDisabled) {
-        // Cần vô hiệu hóa thêm nhãn
-        int toDisable = targetDisabled - currentDisabledCount;
-        for (JLabel label : rowLabels) {
-            if (label.isEnabled() && toDisable > 0) {
-                label.setEnabled(false); // Vô hiệu hóa nhãn
-                label.setBorder(BorderFactory.createLineBorder(Color.RED)); // Đổi viền thành đỏ
-                toDisable--;
+    private void changeLabelStatus(List<JLabel> rowLabels, int targetDisabled, int currentDisabledCount) {
+        if (currentDisabledCount < targetDisabled) {
+            // Cần vô hiệu hóa thêm nhãn
+            int toDisable = targetDisabled - currentDisabledCount;
+            for (JLabel label : rowLabels) {
+                if (label.isEnabled() && toDisable > 0) {
+                    label.setEnabled(false); // Vô hiệu hóa nhãn
+                    label.setBorder(BorderFactory.createLineBorder(Color.RED)); // Đổi viền thành đỏ
+                    toDisable--;
+                }
+                if (toDisable == 0) {
+                    return; // Thoát sau khi đạt mục tiêu
+                }
             }
-            if (toDisable == 0) {
-                return; // Thoát sau khi đạt mục tiêu
+            if (toDisable > 0) {
+                txt_notification.setText("Số lượng que đã đạt tối đa"); // Thông báo nếu đã đạt tối đa
             }
-        }
-        if (toDisable > 0) {
-            txt_notification.setText("Số lượng que đã đạt tối đa"); // Thông báo nếu đã đạt tối đa
-        }
-    } else if (currentDisabledCount > targetDisabled) {
-        // Cần kích hoạt lại một số nhãn
-        int toEnable = currentDisabledCount - targetDisabled;
-        for (JLabel label : rowLabels) {
-            if (!label.isEnabled() && toEnable > 0) {
-                label.setEnabled(true); // Kích hoạt nhãn
-                label.setBorder(BorderFactory.createEmptyBorder()); // Khôi phục viền
-                toEnable--;
-            }
-            if (toEnable == 0) {
-                return; // Thoát sau khi đạt mục tiêu
+        } else if (currentDisabledCount > targetDisabled) {
+            // Cần kích hoạt lại một số nhãn
+            int toEnable = currentDisabledCount - targetDisabled;
+            for (JLabel label : rowLabels) {
+                if (!label.isEnabled() && toEnable > 0) {
+                    label.setEnabled(true); // Kích hoạt nhãn
+                    label.setBorder(BorderFactory.createEmptyBorder()); // Khôi phục viền
+                    toEnable--;
+                }
+                if (toEnable == 0) {
+                    return; // Thoát sau khi đạt mục tiêu
+                }
             }
         }
     }
-}
 
-public void takeSticks(int count) {
-    gamePlayInterface.takeSticks(currentRow, count); // Gọi phương thức lấy que từ giao diện trò chơi
-}
-
-public void updateSPN_Quatity() {
-    if (spn_quatity.isEnabled()) {
-        int numberOfSticksTakenInRow = gamePlayInterface.getNumberOfSticksTakenInRow(currentRow); // Lấy số que đã lấy trong hàng hiện tại
-        spn_quatity.setModel(new SpinnerNumberModel(disabledCount, 0, SticksInRow[currentRow] - numberOfSticksTakenInRow, 1)); // Cập nhật mô hình cho spinner
+    public void takeSticks(int count) {
+        gamePlayInterface.takeSticks(currentRow, count); // Gọi phương thức lấy que từ giao diện trò chơi
     }
-}
 
-public void OverGame(String nameWinner) {
-    lb_nameWinner.setText(nameWinner); // Hiển thị tên người chiến thắng
-    panelControl.setVisible(false); // Ẩn panel điều khiển
-    scrollGameState.setVisible(false); // Ẩn trạng thái trò chơi
-    panelNavigative.setVisible(false); // Ẩn panel điều hướng
-    panelOverGame.setVisible(true); // Hiển thị panel kết thúc trò chơi
-}
+    public void updateSPN_Quatity() {
+        if (spn_quatity.isEnabled()) {
+            int numberOfSticksTakenInRow = gamePlayInterface.getNumberOfSticksTakenInRow(currentRow); // Lấy số que đã lấy trong hàng hiện tại
+            spn_quatity.setModel(new SpinnerNumberModel(disabledCount, 0, SticksInRow[currentRow] - numberOfSticksTakenInRow, 1)); // Cập nhật mô hình cho spinner
+        }
+    }
 
-private void btnMouseEntered(JButton btn) {
-    btn.setBackground(Color.ORANGE); // Đổi màu nền nút khi chuột di chuyển vào
-}
+    public void OverGame(String nameWinner) {
+        lb_nameWinner.setText(nameWinner); // Hiển thị tên người chiến thắng
+        panelControl.setVisible(false); // Ẩn panel điều khiển
+        scrollGameState.setVisible(false); // Ẩn trạng thái trò chơi
+        panelNavigative.setVisible(false); // Ẩn panel điều hướng
+        panelOverGame.setVisible(true); // Hiển thị panel kết thúc trò chơi
+    }
 
-private void btnMouseExited(JButton btn) {
-    btn.setBackground(Color.WHITE); // Khôi phục màu nền nút khi chuột di chuyển ra
-}
+    private void btnMouseEntered(JButton btn) {
+        btn.setBackground(Color.ORANGE); // Đổi màu nền nút khi chuột di chuyển vào
+    }
+
+    private void btnMouseExited(JButton btn) {
+        btn.setBackground(Color.WHITE); // Khôi phục màu nền nút khi chuột di chuyển ra
+    }
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

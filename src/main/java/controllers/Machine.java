@@ -9,8 +9,6 @@ package controllers;
  *
  * @author ASUS
  */
-import java.util.Random;
-
 public class Machine {
 
     private final int numberOfRows;
@@ -97,11 +95,9 @@ public class Machine {
         return makeRandomMove(currentSticksInRow);
     }
 
-    
-     /**
+    /**
      * Tạo nước đi ngẫu nhiên nếu không có nước đi tối ưu.
      */
-
     private int[] makeRandomMove(int[] currentSticksInRow) {
         // Ưu tiên lấy từ đống lớn nhất, nhưng không lấy hết
         int maxHeap = 0;

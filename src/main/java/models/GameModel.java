@@ -3,7 +3,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-
 package models;
 
 /**
@@ -11,13 +10,13 @@ package models;
  * @author ASUS
  */
 public class GameModel {
-    
+
     private int maxRows;
     private int minRows;
     private int maxSticksInRow;
     private int minSticksInRow;
     private boolean isNormalPlay;
-    
+
     public GameModel() {
     }
 
@@ -44,7 +43,6 @@ public class GameModel {
     public void setMinRows(int minRows) {
         this.minRows = minRows;
     }
-    
 
     public int getMaxSticksInRow() {
         return maxSticksInRow;
@@ -52,7 +50,7 @@ public class GameModel {
 
     public int getMinSticksInRow() {
         return minSticksInRow;
-    }  
+    }
 
     public void setMaxSticksInRow(int maxSticksInRow) {
         this.maxSticksInRow = maxSticksInRow;
@@ -69,5 +67,5 @@ public class GameModel {
     public boolean isNormalPlay() {
         return isNormalPlay;
     }
-    
+
 }

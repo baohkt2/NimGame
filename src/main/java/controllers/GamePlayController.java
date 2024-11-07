@@ -8,7 +8,6 @@ package controllers;
 import models.PlayerModel;
 import models.GameStateModel;
 import views.GamePlayView;
-import models.GameModel;
 import interfaces.NavigationInterface;
 import interfaces.GamePlayInterface;
 import java.io.BufferedWriter;
@@ -149,7 +148,7 @@ public class GamePlayController implements GamePlayInterface {
             // Tạo tệp chỉ khi nó chưa tồn tại
             if (!Files.exists(path)) {
                 Files.createFile(path);
-                System.out.println("Tệp đã được tạo tại: " + path.toString());
+                //   System.out.println("Tệp đã được tạo tại: " + path.toString());
             }
         } catch (IOException e) {
             System.out.println("Lỗi khi tạo tệp hoặc thư mục: " + e.getMessage());
@@ -174,7 +173,7 @@ public class GamePlayController implements GamePlayInterface {
             // Ghi lịch sử hành động
             writer.write("HistoryTaken: " + String.join(", ", gameStateModel.getHistoryTaken()) + "\n");
 
-            System.out.println("Trò chơi đã được lưu thành công!");
+            //    System.out.println("Trò chơi đã được lưu thành công!");
         } catch (IOException e) {
             System.out.println("Lỗi khi lưu trò chơi: " + e.getMessage());
             e.printStackTrace(); // In thông tin lỗi để gỡ lỗi
@@ -189,9 +188,9 @@ public class GamePlayController implements GamePlayInterface {
             if (Files.exists(path)) {
                 Files.delete(path);
                 gameStateModel.deleteStateModel(); // Xóa mô hình trạng thái trò chơi
-                System.out.println("Trò chơi đã lưu đã được xóa thành công!");
+                //     System.out.println("Trò chơi đã lưu đã được xóa thành công!");
             } else {
-                System.out.println("Không tìm thấy tệp lưu trò chơi để xóa.");
+                //    System.out.println("Không tìm thấy tệp lưu trò chơi để xóa.");
             }
         } catch (IOException e) {
             System.out.println("Lỗi khi xóa trò chơi đã lưu: " + e.getMessage());
