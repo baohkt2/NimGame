@@ -161,7 +161,7 @@ public class GamePlayView extends javax.swing.JFrame {
 
         panelNavigative.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        btn_backHome.setText("Back");
+        btn_backHome.setText("Back And Save");
         btn_backHome.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btn_backHome.setFocusPainted(false);
         btn_backHome.setBackground(Color.WHITE);
@@ -176,7 +176,7 @@ public class GamePlayView extends javax.swing.JFrame {
                 btn_backHomeMouseExited(evt);
             }
         });
-        panelNavigative.add(btn_backHome, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 60, -1));
+        panelNavigative.add(btn_backHome, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
 
         btn_giveUp.setText("Give Up");
         btn_giveUp.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -193,7 +193,7 @@ public class GamePlayView extends javax.swing.JFrame {
                 btn_giveUpMouseExited(evt);
             }
         });
-        panelNavigative.add(btn_giveUp, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 10, 70, -1));
+        panelNavigative.add(btn_giveUp, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 10, 70, -1));
 
         btn_hint.setText("Hint");
         btn_hint.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -210,7 +210,7 @@ public class GamePlayView extends javax.swing.JFrame {
                 btn_hintMouseExited(evt);
             }
         });
-        panelNavigative.add(btn_hint, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 10, 60, -1));
+        panelNavigative.add(btn_hint, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 10, 60, -1));
 
         btn_undoSticksTaken.setText("Undo");
         btn_undoSticksTaken.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));

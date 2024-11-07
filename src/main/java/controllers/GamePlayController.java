@@ -34,7 +34,7 @@ public class GamePlayController implements GamePlayInterface {
     private Machine machine; // Điều khiển AI
     private Boolean takesFirst; // Biến kiểm tra ai đi trước
 
-    public GamePlayController(GamePlayView gamePlayView, GameStateModel gameStateModel, PlayerModel player1, PlayerModel player2) {       
+    public GamePlayController(GamePlayView gamePlayView, GameStateModel gameStateModel, PlayerModel player1, PlayerModel player2) {
         this.player1 = player1;
         this.player2 = player2;
         this.gameStateModel = gameStateModel;
@@ -69,7 +69,7 @@ public class GamePlayController implements GamePlayInterface {
         return false; // Trò chơi chưa kết thúc
     }
 
-    public void setPriorities() { 
+    public void setPriorities() {
         if (!takesFirst) {
             // Nếu người chơi 2 là máy và có thể lấy
             if (player2.getCanTake() && player2.getIsMachine()) {
@@ -82,9 +82,9 @@ public class GamePlayController implements GamePlayInterface {
                         e.printStackTrace(); // Xử lý ngoại lệ
                     }
                 }).start();
-            } else {
-                gamePlayView.setViewForAI(false); // False khi là người hoặc máy nhưng chưa tới lượt
             }
+        } else {
+            gamePlayView.setViewForAI(false); // False khi là người hoặc máy nhưng chưa tới lượt
         }
     }
 
@@ -112,14 +112,17 @@ public class GamePlayController implements GamePlayInterface {
                 updateHistoryTaken(currentRow, disabledCount); // Cập nhật lịch sử
                 gamePlayView.updateHistoryTaken(); // Cập nhật giao diện lịch sử
                 gamePlayView.refresh();
-            }          
+            }
         }
     }
 
     @Override
     public int getNumberOfSticksTakenInRow(int rowIndex) {
         int[] sticksTaken = gameStateModel.getSticksTaken();
-        return sticksTaken[rowIndex]; // Trả về số que đã lấy trong hàng chỉ định
+        if (sticksTaken.length > 0) {
+            return sticksTaken[rowIndex]; // Trả về số que đã lấy trong hàng chỉ định
+        }
+        return 0;
     }
 
     @Override

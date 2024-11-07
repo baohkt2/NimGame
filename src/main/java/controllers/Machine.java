@@ -54,11 +54,11 @@ public class Machine {
      * Misère-play: Tìm nước đi tối ưu để đạt nim_sum = 1 hoặc chọn ngẫu nhiên
      * nếu không có.
      */
-    private int[] miserePlay(int[] sticksTaken) {
+   private int[] miserePlay(int[] sticksTaken) {
         int[] currentSticksInRow = getCurrentSticksInRow(sticksTaken);
         int nimSum = calculateNimSum(currentSticksInRow);
 
-        // Count rows with more than one stick
+        // Đếm số hàng có nhiều hơn 1 que
         int rowsWithMoreThanOne = 0;
         for (int sticks : currentSticksInRow) {
             if (sticks > 1) {
@@ -66,33 +66,28 @@ public class Machine {
             }
         }
 
-        // If only one row has more than one stick, leave one stick to force opponent into a losing position
+        // Nếu chỉ còn một hàng có hơn 1 que, giảm số que còn lại xuống 0
         if (rowsWithMoreThanOne <= 1) {
             for (int i = 0; i < numberOfRows; i++) {
                 if (currentSticksInRow[i] > 1) {
-                    return new int[]{i + 1, currentSticksInRow[i] - 1}; // Leave one stick
+                    return new int[]{i + 1, currentSticksInRow[i]}; // Giảm về 0
                 }
             }
         }
-
-        // If nim_sum is 0, we are in a losing position; we should try to make a move that maintains this state
-        if (nimSum == 0) {
-            return makeRandomMove(currentSticksInRow); // If no optimal move found, make a random move
-        }
-
-        // Attempt to create a nim_sum of 1
+        
+        // Tìm nước đi tạo nim_sum = 1
         for (int i = 0; i < numberOfRows; i++) {
             int heap = currentSticksInRow[i];
-            int target = heap ^ nimSum; // Calculate target heap size
+            int target = heap ^ nimSum;
+
             if (target < heap) {
-                return new int[]{i + 1, heap - target}; // Return the move that creates a nim_sum of 1
+                return new int[]{i + 1, heap - target}; // Trả về nước đi tạo nim_sum = 1
             }
         }
 
-        // If no optimal move found, make a random move
+        // Nếu không có nước đi tối ưu, chọn ngẫu nhiên
         return makeRandomMove(currentSticksInRow);
     }
-
     /**
      * Tính toán nim_sum cho các đống.
      */
