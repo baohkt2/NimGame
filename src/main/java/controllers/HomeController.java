@@ -257,7 +257,7 @@ public class HomeController implements HomeInterface, NavigationInterface {
 
         // Kiểm tra xem tệp có tồn tại trước khi cố gắng đọc
         if (!Files.exists(path)) {
-            System.out.println("Tệp cài đặt không tồn tại tại: " + path.toString());
+        //    System.out.println("Tệp cài đặt không tồn tại tại: " + path.toString());
             SaveSetting(5, 1, 9, 1, Boolean.TRUE); // Tạo cài đặt mặc định nếu tệp không tồn tại
             return; // Thoát nếu tệp không tồn tại
         }
@@ -294,10 +294,10 @@ public class HomeController implements HomeInterface, NavigationInterface {
                         break;
                 }
             }
-            System.out.println("Cài đặt đã được tải thành công!");
+        //    System.out.println("Cài đặt đã được tải thành công!");
             homeView.setSetting(gameModel.getMaxRows(), gameModel.getMinRows(), gameModel.getMaxSticksInRow(), gameModel.getMinSticksInRow(), gameModel.isNormalPlay()); // Cập nhật giao diện chính với cài đặt
         } catch (IOException e) {
-            System.out.println("Lỗi khi đọc cài đặt: " + e.getMessage());
+        //    System.out.println("Lỗi khi đọc cài đặt: " + e.getMessage());
             e.printStackTrace(); // In thông tin lỗi để gỡ lỗi
         }
     }
