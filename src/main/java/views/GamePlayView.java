@@ -19,11 +19,7 @@ import javax.swing.JScrollPane;
 import javax.swing.SpinnerNumberModel;
 import interfaces.GamePlayInterface;
 import java.awt.Component;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JScrollBar;
 import javax.swing.SwingUtilities;
 

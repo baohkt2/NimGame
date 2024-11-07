@@ -1,0 +1,5 @@
+MaxRows: 5
+MinRows: 4
+MaxSticksInRow: 5
+MinSticksInRow: 4
+GameRules: true
