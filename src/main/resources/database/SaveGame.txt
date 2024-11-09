@@ -1,0 +1,7 @@
+GameMode: PvM
+TakeFirst: false
+CurrentTurn: player1
+NumberOfRows: 4
+SticksInRow: 5, 4, 4, 5
+SticksTaken: 4, 0, 0, 0
+HistoryTaken: 0. Machine đã lấy 4 que ở hàng 1

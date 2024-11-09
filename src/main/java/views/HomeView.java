@@ -511,6 +511,7 @@ public class HomeView extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_newgameMouseClicked
 
     private void backHome() {
+        this.layerExit.setVisible(false);
         this.layerTakeFirst.setVisible(false);
         this.layerGameMode.setVisible(false);
         this.layerMenu.setVisible(true);
