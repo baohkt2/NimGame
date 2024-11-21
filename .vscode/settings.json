@@ -1,0 +1,7 @@
+{
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "maven.terminal.customEnv": [
+
+    ],
+    "maven.terminal.useJavaHome": false
+}
