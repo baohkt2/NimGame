@@ -31,11 +31,11 @@ Nim is a mathematical game of strategy in which two players take turns removing 
 - Java Swing (GUI)
 
 ## Installation & Running
-
+In NetBean
 1. Clone the repository
 2. Navigate to the project directory
-3. Compile the project: `javac src/main/java/nimgame/NimGame.java`
-4. Run the game: `java src.main.java.nimgame.NimGame`
+3. Clean and Build
+4. Run the game
 
 ## How to Play
 
