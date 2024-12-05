@@ -1,7 +1,0 @@
-GameMode: PvP
-TakeFirst: true
-CurrentTurn: player1
-NumberOfRows: 4
-SticksInRow: 4, 5, 5, 5
-SticksTaken: 0, 0, 0, 0
-HistoryTaken: 

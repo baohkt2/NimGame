@@ -30,11 +30,9 @@ public class Machine {
     private int[] normalPlay(int[] sticksTaken) {
         int[] currentSticksInRow = getCurrentSticksInRow(sticksTaken);
         int nimSum = calculateNimSum(currentSticksInRow);
-
         if (nimSum == 0) {
             return makeRandomMove(currentSticksInRow);  // Nếu nim_sum = 0, chọn ngẫu nhiên vì không có nước đi tối ưu
         }
-
         // Tìm hàng để tạo nim_sum = 0
         for (int i = 0; i < numberOfRows; i++) {
             int heap = currentSticksInRow[i];
@@ -44,7 +42,6 @@ public class Machine {
                 return new int[]{i + 1, heap - target};  // Trả về hàng (1-based) và số que cần lấy
             }
         }
-
         return makeRandomMove(currentSticksInRow);  // Nếu không có nước đi tối ưu, chọn ngẫu nhiên
     }
 
@@ -55,7 +52,6 @@ public class Machine {
     private int[] miserePlay(int[] sticksTaken) {
         int[] currentSticksInRow = getCurrentSticksInRow(sticksTaken);
         int nimSum = calculateNimSum(currentSticksInRow);
-
         // Đếm số đống có nhiều hơn 1 que
         int heapsWithMoreThanOne = 0;
         int lastHeapWithMoreThanOne = -1;
@@ -65,7 +61,6 @@ public class Machine {
                 lastHeapWithMoreThanOne = i;
             }
         }
-
         // Giai đoạn cuối: chỉ còn một đống có nhiều hơn 1 que
         if (heapsWithMoreThanOne == 1) {
             int remainingHeaps = 0;
@@ -74,12 +69,10 @@ public class Machine {
                     remainingHeaps++;
                 }
             }
-
             // Quyết định số que cần lấy để để lại số đống lẻ
             int sticksToTake = currentSticksInRow[lastHeapWithMoreThanOne] - (remainingHeaps % 2 == 0 ? 0 : 1);
             return new int[]{lastHeapWithMoreThanOne + 1, sticksToTake};
         }
-
         // Giai đoạn giữa và đầu: áp dụng chiến lược nim-sum
         if (nimSum != 0) {
             for (int i = 0; i < currentSticksInRow.length; i++) {
@@ -90,7 +83,6 @@ public class Machine {
                 }
             }
         }
-
         // Nếu không có nước đi tối ưu, chọn nước đi an toàn
         return makeRandomMove(currentSticksInRow);
     }
