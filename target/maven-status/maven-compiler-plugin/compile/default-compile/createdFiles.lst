@@ -17,6 +17,7 @@ views\GamePlayView.class
 views\GamePlayView$1.class
 models\GameModel.class
 views\HomeView$1.class
+models\SaveModel.class
 interfaces\HomeInterface.class
 views\HomeView$5.class
 views\GamePlayView$LabelClickListener.class
@@ -27,7 +28,6 @@ nimgame\NimGame.class
 views\HomeView$15.class
 views\GamePlayView$7.class
 views\HomeView$2.class
-.netbeans_automatic_build
 views\HomeView$6.class
 interfaces\NavigationInterface.class
 views\GamePlayView$3.class

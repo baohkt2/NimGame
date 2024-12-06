@@ -94,11 +94,11 @@ public class GameStateModel {
     }
 
     public void incrementHistoryIndex() {
-        historyIndex++; // Increment the index
+        historyIndex++; 
     }
 
     public void decrementHistoryIndex() {
-        historyIndex--; // Decrement the index
+        historyIndex--; 
     }
 
     public void deleteStateModel() {

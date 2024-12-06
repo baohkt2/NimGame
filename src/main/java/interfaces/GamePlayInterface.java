@@ -10,23 +10,23 @@ package interfaces;
  */
 public interface GamePlayInterface {
 
-    String getNamePlayerCanTake();
+    String getNamePlayerCanTake();  // Lấy tên người chơi tới lượt
 
-    void takeSticks(int currentRow, int disabledCount);
+    void takeSticks(int currentRow, int disabledCount); // Lấy que
 
-    int getNumberOfSticksTakenInRow(int rowIndex);
+    int getNumberOfSticksTakenInRow(int rowIndex);  // Lấy số lượng que trên hàng
 
-    void backHome();
+    void backHome();    // Về trang chủ
 
-    String[] getHistoryTaken();
+    String[] getHistoryTaken(); // Lấy lịch sử nước đi
 
-    void undoSticksTaken();
+    void undoSticksTaken(); // Hoàn tác nước đi
 
-    void giveUp();
+    void giveUp();  // Bỏ cuộc
 
-    void hint();
+    void hint();    // Gợi ý
 
-    void playAgain();
+    void playAgain();   // Chơi lại
 
-    void backHomeAfterOverGame();
+    void backHomeAfterOverGame();   // Về trang chủ sau khi kết thúc ván 
 }

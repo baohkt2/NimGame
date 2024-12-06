@@ -17,7 +17,6 @@ import views.HomeView;
 public class NimGame {
 
     public static void main(String[] args) {
-
         try {
             HomeView homeView = new HomeView();
             GameModel gameModel = new GameModel();

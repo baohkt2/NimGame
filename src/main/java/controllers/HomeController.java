@@ -13,20 +13,11 @@ import models.PlayerModel;
 import views.GamePlayView;
 import views.HomeView;
 import interfaces.HomeInterface;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+
 import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
+import models.SaveModel;
 
 /**
  *
@@ -34,6 +25,7 @@ import java.util.stream.Collectors;
  */
 public class HomeController implements HomeInterface, NavigationInterface {
 
+    private SaveModel saveModel;
     private GameModel gameModel; // Mô hình trò chơi
     private HomeView homeView; // Giao diện chính
     private GamePlayView gamePlayView; // Giao diện trò chơi
@@ -41,26 +33,30 @@ public class HomeController implements HomeInterface, NavigationInterface {
     private GamePlayController gamePlayController; // Điều khiển trò chơi
     private PlayerModel player1; // Người chơi 1
     private PlayerModel player2; // Người chơi 2
-    private String namePlayer1 = new String("Player 1"); // Tên người chơi 1
-    private String namePlayer2 = new String("Player 2"); // Tên người chơi 2
-    private String nameMachine = new String("Machine"); // Tên máy
+    private String namePlayer1;
+    private String namePlayer2;
+    private String nameMachine;
 
     public HomeController(GameModel gameModel, HomeView homeView) throws URISyntaxException {
         this.gameModel = gameModel;
         this.homeView = homeView;
         this.homeView.setHomeActions(this); // Thiết lập các hành động cho giao diện chính
-
+        saveModel = new SaveModel();
+        this.namePlayer1 = saveModel.getNamePlayer1();
+        this.namePlayer2 = saveModel.getNamePlayer2();
+        this.nameMachine = saveModel.getNameMachine();
         ReadSetting(); // Đọc cài đặt
-        CheckSaveGame(); // Kiểm tra trò chơi đã lưu
+        CheckSaveModel(); // Kiểm tra trò chơi đã lưu
     }
 
-    void NewGame() {
+    private void NewGame() {
         int numberOfRows = gameStateModel.getNumberOfRows(); // Lấy số hàng
         int[] SticksInRow = gameStateModel.getSticksInRow(); // Lấy số que trong mỗi hàng
         gameStateModel.setIsNormalPlay(gameModel.isNormalPlay()); // Thiết lập chế độ chơi
         gamePlayView = new GamePlayView(numberOfRows, SticksInRow); // Khởi tạo giao diện trò chơi
 
         gamePlayController = new GamePlayController(gamePlayView, gameStateModel, player1, player2); // Khởi tạo điều khiển trò chơi
+        gamePlayController.setSaveModel(saveModel);
         gamePlayController.setNavigationInterface(this); // Thiết lập giao diện điều hướng
         gamePlayController.StartGame(); // Bắt đầu trò chơi
         gamePlayController.setPriorities(); // Thiết lập ưu tiên
@@ -88,7 +84,7 @@ public class HomeController implements HomeInterface, NavigationInterface {
     @Override
     public void Continue() {
         try {
-            readSaveGame(); // Đọc trò chơi đã lưu
+            readSaveGame(); // Đọc trò chơi đã lưu  
         } catch (URISyntaxException ex) {
             Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -103,7 +99,7 @@ public class HomeController implements HomeInterface, NavigationInterface {
     public void showHome() {
         homeView.setVisible(true); // Hiển thị giao diện chính
         try {
-            this.CheckSaveGame(); // Kiểm tra trò chơi đã lưu
+            this.CheckSaveModel(); // Kiểm tra trò chơi đã lưu
         } catch (URISyntaxException ex) {
             Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -142,172 +138,30 @@ public class HomeController implements HomeInterface, NavigationInterface {
     }
 
     private void readSaveGame() throws URISyntaxException {
-        gameStateModel = new GameStateModel(); // Khởi tạo mô hình trạng thái trò chơi
-        Path path = Paths.get("src/main/resources/database/SaveGame.txt"); // Đường dẫn đến tệp lưu trò chơi
-
-        // Kiểm tra xem tệp có tồn tại trước khi cố gắng đọc
-        if (!Files.exists(path)) {
-            //    System.out.println("Tệp lưu trò chơi không tồn tại tại: " + path.toString());
-            return; // Thoát nếu tệp không tồn tại
-        }
-
-        // Đọc thông tin từ tệp
-        try (BufferedReader reader = new BufferedReader(new FileReader(path.toFile()))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(": "); // Tách dòng thành các phần
-                if (parts.length < 2) {
-                    continue; // Bỏ qua các dòng không có định dạng mong đợi
-                }
-                String key = parts[0].trim(); // Lấy khóa
-                String value = parts[1].trim(); // Lấy giá trị
-
-                switch (key) {
-                    case "GameMode":
-                        if (value.equals("PvM")) {
-                            player1 = new PlayerModel(namePlayer1, false); // Khởi tạo người chơi 1
-                            player2 = new PlayerModel(nameMachine, true); // Khởi tạo máy
-                        } else {
-                            player1 = new PlayerModel(namePlayer1, false); // Khởi tạo người chơi 1
-                            player2 = new PlayerModel(namePlayer2, false); // Khởi tạo người chơi 2
-                        }
-                        break;
-                    case "TakeFirst":
-                        gameStateModel.setTakeFirst(Boolean.parseBoolean(value)); // Thiết lập ai đi trước
-                        break;
-                    case "CurrentTurn":
-                        player1.setCanTake(value.equals("player1")); // Thiết lập lượt hiện tại
-                        player2.setCanTake(!player1.getCanTake());
-                        break;
-                    case "NumberOfRows":
-                        gameStateModel.setNumberOfRows(Integer.parseInt(value)); // Thiết lập số hàng
-                        break;
-                    case "SticksInRow":
-                        gameStateModel.setSticksInRow(parseIntArray(value)); // Thiết lập số que trong hàng
-                        break;
-                    case "SticksTaken":
-                        gameStateModel.setSticksTaken(parseIntArray(value)); // Thiết lập số que đã lấy
-                        break;
-                    case "HistoryTaken":
-                        List<String> historyList = Arrays.stream(value.split(","))
-                                .map(String::trim)
-                                .collect(Collectors.toList()); // Lưu lịch sử các hành động
-                        gameStateModel.setHistoryIndex(historyList.size() - 1); // Thiết lập chỉ số lịch sử
-                        gameStateModel.setHistoryTaken(historyList); // Lưu lịch sử
-                        break;
-                    default:
-                        //        System.out.println("Khóa không xác định: " + key); // Xử lý khóa không xác định
-                        break;
-                }
-            }
-            //    System.out.println("Trò chơi đã được tải thành công!");
-        } catch (IOException e) {
-            System.out.println("Lỗi khi đọc trò chơi: " + e.getMessage());
-            e.printStackTrace(); // In thông tin lỗi để gỡ lỗi
-        }
-    }
-
-    // Phương thức trợ giúp để phân tích mảng số nguyên từ chu ```java
-    // Phương thức trợ giúp để phân tích mảng số nguyên từ chuỗi
-    private int[] parseIntArray(String value) {
-        String[] sticksStr = value.replaceAll("[\\[\\]]", "").split(", "); // Xóa dấu ngoặc và tách chuỗi
-        return Arrays.stream(sticksStr) // Chuyển đổi thành stream
-                .mapToInt(Integer::parseInt) // Chuyển đổi từng phần thành số nguyên
-                .toArray(); // Trả về mảng số nguyên
+        saveModel.readSaveGame();
+        this.player1 = saveModel.getPlayer1();
+        this.player2 = saveModel.getPlayer2();
+        this.gameStateModel = saveModel.getGameStateModel();
     }
 
     @Override
     public void SaveSetting(int maxRows, int minRows, int maxSticks, int minSticks, Boolean normalPlay) {
         gameModel = new GameModel(maxRows, minRows, maxSticks, minSticks, normalPlay); // Khởi tạo mô hình trò chơi với cài đặt mới
-        Path path = Paths.get("src/main/resources/database/Setting.txt"); // Đường dẫn đến tệp cài đặt
-
-        // Tạo thư mục nếu chưa tồn tại
-        try {
-            Files.createDirectories(path.getParent());
-            // Tạo tệp chỉ khi nó chưa tồn tại
-            if (!Files.exists(path)) {
-                Files.createFile(path);
-                //    System.out.println("Tệp đã được tạo tại: " + path.toString());
-            }
-        } catch (IOException e) {
-            //    System.out.println("Lỗi khi tạo tệp hoặc thư mục: " + e.getMessage());
-            e.printStackTrace(); // In thông tin lỗi để gỡ lỗi
-            return; // Thoát nếu có lỗi
-        }
-
-        // Lưu thông tin vào tệp (ghi đè nếu đã tồn tại)
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(path.toFile(), false))) { // 'false' để ghi đè           
-            // Ghi thông tin trạng thái trò chơi
-            writer.write("MaxRows: " + gameModel.getMaxRows() + "\n");
-            writer.write("MinRows: " + gameModel.getMinRows() + "\n");
-            writer.write("MaxSticksInRow: " + gameModel.getMaxSticksInRow() + "\n");
-            writer.write("MinSticksInRow: " + gameModel.getMinSticksInRow() + "\n");
-            // Ghi quy tắc trò chơi
-            writer.write("GameRules: " + gameModel.isNormalPlay() + "\n");
-
-            //   System.out.println("Cài đặt đã được lưu thành công!");
-        } catch (IOException e) {
-            //    System.out.println("Lỗi khi lưu cài đặt: " + e.getMessage());
-            e.printStackTrace(); // In thông tin lỗi để gỡ lỗi
-        }
+        saveModel.SaveSetting(gameModel);
     }
 
-    private void ReadSetting() {
-        Path path = Paths.get("src/main/resources/database/Setting.txt"); // Đường dẫn đến tệp cài đặt
-
-        // Kiểm tra xem tệp có tồn tại trước khi cố gắng đọc
-        if (!Files.exists(path)) {
-        //    System.out.println("Tệp cài đặt không tồn tại tại: " + path.toString());
-            SaveSetting(5, 1, 9, 1, Boolean.TRUE); // Tạo cài đặt mặc định nếu tệp không tồn tại
-            return; // Thoát nếu tệp không tồn tại
-        }
-
-        // Đọc thông tin từ tệp
-        try (BufferedReader reader = new BufferedReader(new FileReader(path.toFile()))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(": "); // Tách dòng thành các phần
-                if (parts.length < 2) {
-                    continue; // Bỏ qua các dòng không có định dạng mong đợi
-                }
-                String key = parts[0].trim(); // Lấy khóa
-                String value = parts[1].trim(); // Lấy giá trị
-
-                switch (key) {
-                    case "MaxRows":
-                        gameModel.setMaxRows(Integer.parseInt(value)); // Thiết lập số hàng tối đa
-                        break;
-                    case "MinRows":
-                        gameModel.setMinRows(Integer.parseInt(value)); // Thiết lập số hàng tối thiểu
-                        break;
-                    case "MaxSticksInRow":
-                        gameModel.setMaxSticksInRow(Integer.parseInt(value)); // Thiết lập số que tối đa trong hàng
-                        break;
-                    case "MinSticksInRow":
-                        gameModel.setMinSticksInRow(Integer.parseInt(value)); // Thiết lập số que tối thiểu trong hàng
-                        break;
-                    case "GameRules":
-                        gameModel.setIsNormalPlay(Boolean.parseBoolean(value)); // Thiết lập quy tắc trò chơi
-                        break;
-                    default:
-                        System.out.println("Lỗi đọc giá trị: " + key); // Xử lý khóa không xác định
-                        break;
-                }
-            }
-        //    System.out.println("Cài đặt đã được tải thành công!");
-            homeView.setSetting(gameModel.getMaxRows(), gameModel.getMinRows(), gameModel.getMaxSticksInRow(), gameModel.getMinSticksInRow(), gameModel.isNormalPlay()); // Cập nhật giao diện chính với cài đặt
-        } catch (IOException e) {
-        //    System.out.println("Lỗi khi đọc cài đặt: " + e.getMessage());
-            e.printStackTrace(); // In thông tin lỗi để gỡ lỗi
-        }
+    private void ReadSetting() throws URISyntaxException {
+        saveModel.ReadSetting();
+        this.gameModel = saveModel.getGameModel();
+        homeView.setSetting(gameModel.getMaxRows(), gameModel.getMinRows(), gameModel.getMaxSticksInRow(), gameModel.getMinSticksInRow(), gameModel.isNormalPlay()); // Cập nhật giao diện chính với cài đặt
     }
 
-    private void CheckSaveGame() throws URISyntaxException {
+    private void CheckSaveModel() throws URISyntaxException {
         this.readSaveGame(); // Đọc trò chơi đã lưu
         if (gameStateModel.isEmpty()) {
-            homeView.setContinue(false); // Thiết lập tùy chọn tiếp tục nếu không có trò chơi đã lưu
+            homeView.setContinue(false); // Ẩn nút tiếp tục nếu không có trò chơi đã lưu
         } else {
-            homeView.setContinue(true); // Thiết lập tùy chọn tiếp tục nếu có trò chơi đã lưu
+            homeView.setContinue(true); //  Hiển thị nút tiếp tục nếu có trò chơi đã lưu
         }
     }
 }

@@ -10,11 +10,11 @@ package interfaces;
  */
 public interface HomeInterface {
 
-    void NewGamePvP();
+    void NewGamePvP();  // Tạo ván mới với chế độ người vs người
 
-    void NewGamePvM(Boolean takesFirst);
+    void NewGamePvM(Boolean takesFirst);    // Tạo ván mới với chế độ người vs máy
 
-    void Continue();
+    void Continue();    // Tiếp tục ván
 
-    void SaveSetting(int maxRows, int minRows, int maxSticks, int minSticks, Boolean normalPlay);
+    void SaveSetting(int maxRows, int minRows, int maxSticks, int minSticks, Boolean normalPlay);   // Lưu cài đặt
 }

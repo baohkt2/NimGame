@@ -15,6 +15,9 @@ public class PlayerModel {
     private Boolean isMachine;
     private Boolean canTake;
 
+    public PlayerModel(){
+    }
+
     public PlayerModel(Boolean isMachine) {
         this.isMachine = isMachine;
     }

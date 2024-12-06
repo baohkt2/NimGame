@@ -10,14 +10,10 @@ import models.GameStateModel;
 import views.GamePlayView;
 import interfaces.NavigationInterface;
 import interfaces.GamePlayInterface;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+
 import java.util.Arrays;
 import java.util.List;
+import models.SaveModel;
 
 /**
  *
@@ -25,6 +21,7 @@ import java.util.List;
  */
 public class GamePlayController implements GamePlayInterface {
 
+    private SaveModel saveModel;
     private PlayerModel player1; // Người chơi 1
     private PlayerModel player2; // Người chơi 2
     private GameStateModel gameStateModel; // Mô hình trạng thái trò chơi
@@ -40,6 +37,10 @@ public class GamePlayController implements GamePlayInterface {
         this.gamePlayView = gamePlayView;
         this.machine = new Machine(gameStateModel.getNumberOfRows(), gameStateModel.getSticksInRow());
         this.takesFirst = gameStateModel.getTakeFirst();
+    }
+
+    public void setSaveModel(SaveModel saveModel) {
+        this.saveModel = saveModel;
     }
 
     public void setNavigationInterface(NavigationInterface navigationInterface) {
@@ -140,62 +141,14 @@ public class GamePlayController implements GamePlayInterface {
     }
 
     private void saveGame() {
-        Path path = Paths.get("src/main/resources/database/SaveGame.txt"); // Đường dẫn đến tệp lưu trò chơi
-
-        // Tạo thư mục nếu chưa tồn tại
-        try {
-            Files.createDirectories(path.getParent());
-            // Tạo tệp chỉ khi nó chưa tồn tại
-            if (!Files.exists(path)) {
-                Files.createFile(path);
-                //   System.out.println("Tệp đã được tạo tại: " + path.toString());
-            }
-        } catch (IOException e) {
-            System.out.println("Lỗi khi tạo tệp hoặc thư mục: " + e.getMessage());
-            e.printStackTrace(); // In thông tin lỗi để gỡ lỗi
-            return; // Thoát nếu có lỗi
-        }
-
-        // Lưu thông tin vào tệp (ghi đè nếu đã tồn tại)
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(path.toFile(), false))) { // 'false' để ghi đè
-            // Ghi chế độ trò chơi
-            writer.write("GameMode: " + (player2.getIsMachine() ? "PvM" : "PvP") + "\n");
-
-            writer.write("TakeFirst: " + this.takesFirst + "\n"); // Ghi thông tin ai đi trước
-            // Lượt hiện tại
-            writer.write("CurrentTurn: " + (player1.getCanTake() ? "player1" : "player2") + "\n");
-
-            // Ghi thông tin trạng thái trò chơi
-            writer.write("NumberOfRows: " + gameStateModel.getNumberOfRows() + "\n");
-            writer.write("SticksInRow: " + java.util.Arrays.toString(gameStateModel.getSticksInRow()).replaceAll("[\\[\\]]", "") + "\n");
-            writer.write("SticksTaken: " + java.util.Arrays.toString(gameStateModel.getSticksTaken()).replaceAll("[\\[\\]]", "") + "\n");
-
-            // Ghi lịch sử hành động
-            writer.write("HistoryTaken: " + String.join(", ", gameStateModel.getHistoryTaken()) + "\n");
-
-            //    System.out.println("Trò chơi đã được lưu thành công!");
-        } catch (IOException e) {
-            System.out.println("Lỗi khi lưu trò chơi: " + e.getMessage());
-            e.printStackTrace(); // In thông tin lỗi để gỡ lỗi
-        }
+        saveModel.setPlayer1(player1);
+        saveModel.setPlayer2(player2);
+        saveModel.setGameStateModel(gameStateModel);
+        saveModel.setTakesFirst(takesFirst);
     }
 
     private void deleteSaveGame() {
-        Path path = Paths.get("src/main/resources/database/SaveGame.txt"); // Đường dẫn đến tệp lưu trò chơi
-
-        // Xóa tệp lưu trò chơi nếu nó tồn tại
-        try {
-            if (Files.exists(path)) {
-                Files.delete(path);
-                gameStateModel.deleteStateModel(); // Xóa mô hình trạng thái trò chơi
-                //     System.out.println("Trò chơi đã lưu đã được xóa thành công!");
-            } else {
-                //    System.out.println("Không tìm thấy tệp lưu trò chơi để xóa.");
-            }
-        } catch (IOException e) {
-            System.out.println("Lỗi khi xóa trò chơi đã lưu: " + e.getMessage());
-            e.printStackTrace(); // In thông tin lỗi để gỡ lỗi
-        }
+        saveModel.deleteSaveGame();
     }
 
     @Override
@@ -208,13 +161,13 @@ public class GamePlayController implements GamePlayInterface {
         }
     }
 
-    // Đổi lượt chơi giữa hai người chơi và xử lý lượt của máy nếu cần
+    // Đổi lượt chơi giữa hai người chơi và xử lý lượt của máy nếu tới
     void swapTurns(Boolean take) {
-        // Đổi trạng thái có thể lấy que của hai người chơi
+        // Chuyển lượt lấy que 
         player1.setCanTake(!player1.getCanTake());
         player2.setCanTake(!player2.getCanTake());
 
-        // Cập nhật giao diện cho AI nếu người chơi hiện tại là máy
+        // Cập nhật giao diện cho máy nếu người chơi hiện tại là máy
         gamePlayView.setViewForAI(player2.getCanTake() && player2.getIsMachine());
 
         // Nếu người chơi hiện tại là máy và được phép lấy que, thực hiện lượt của máy
@@ -222,9 +175,9 @@ public class GamePlayController implements GamePlayInterface {
             new Thread(() -> {
                 try {
                     Thread.sleep(1500); // Đợi 1.5 giây trước khi máy thực hiện lượt
-                    gamePlayView.doTurn(); // Máy thực hiện lượt
+                    gamePlayView.doTurn(); 
                 } catch (InterruptedException e) {
-                    e.printStackTrace(); // In lỗi nếu có
+                    e.printStackTrace(); 
                 }
             }).start();
         }
@@ -286,9 +239,7 @@ public class GamePlayController implements GamePlayInterface {
 
             // Đổi lượt về người chơi trước đó
             swapTurns(false);
-        } else {
-            System.out.println("Không có hành động nào để hoàn tác.");
-        }
+        } 
     }
 
     @Override

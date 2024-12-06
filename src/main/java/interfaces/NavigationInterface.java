@@ -10,11 +10,11 @@ package interfaces;
  */
 public interface NavigationInterface {
 
-    void showHome();
+    void showHome();    // Hiện trang chủ
 
-    void hideHome();
+    void hideHome();    // Ẩn trang chủ
 
-    void showGamePlay();
+    void showGamePlay();    // Hiện ván chơi
 
-    void hideGamePlay();
+    void hideGamePlay();    // Ẩn ván chơi
 }
