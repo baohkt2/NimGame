@@ -5,6 +5,8 @@
  */
 package controllers;
 
+import java.util.Random;
+
 /**
  *
  * @author ASUS
@@ -16,7 +18,7 @@ public class Machine {
 
     public Machine(int numberOfRows, int[] sticksInRow) {
         this.numberOfRows = numberOfRows;
-        this.sticksInRow = sticksInRow; 
+        this.sticksInRow = sticksInRow;
     }
 
     public int[] calculateNextMove(int[] sticksTaken, boolean isNormalPlay) {
@@ -91,7 +93,8 @@ public class Machine {
      * Tạo nước đi ngẫu nhiên nếu không có nước đi tối ưu.
      */
     private int[] makeRandomMove(int[] currentSticksInRow) {
-        // Ưu tiên lấy từ đống lớn nhất, nhưng không lấy hết
+        // Ưu tiên lấy từ đống lớn nhất, nhưng cố gắng không lấy hết
+        Random random = new Random();
         int maxHeap = 0;
         int maxHeapIndex = 0;
         for (int i = 0; i < currentSticksInRow.length; i++) {
@@ -100,8 +103,9 @@ public class Machine {
                 maxHeapIndex = i;
             }
         }
-        int sticksToTake = maxHeap > 1 ? maxHeap - 1 : 1;
+        int sticksToTake = (maxHeap == 1) ? 1 : random.nextInt(maxHeap - 1) + 1;
         return new int[]{maxHeapIndex + 1, sticksToTake};
+
     }
 
     /**
