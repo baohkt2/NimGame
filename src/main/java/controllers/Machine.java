@@ -11,12 +11,12 @@ package controllers;
  */
 public class Machine {
 
-    private final int numberOfRows;
-    private final int[] sticksInRow;
+    private int numberOfRows;
+    private int[] sticksInRow;
 
     public Machine(int numberOfRows, int[] sticksInRow) {
         this.numberOfRows = numberOfRows;
-        this.sticksInRow = sticksInRow.clone(); // Clone to avoid external modification
+        this.sticksInRow = sticksInRow; 
     }
 
     public int[] calculateNextMove(int[] sticksTaken, boolean isNormalPlay) {
@@ -28,7 +28,7 @@ public class Machine {
      * nếu không có.
      */
     private int[] normalPlay(int[] sticksTaken) {
-        int[] currentSticksInRow = getCurrentSticksInRow(sticksTaken);
+        int[] currentSticksInRow = getCurrentSticksInRow(sticksTaken);  // Lấy số lượng que hiện tại có thể lấy trên dòng
         int nimSum = calculateNimSum(currentSticksInRow);
         if (nimSum == 0) {
             return makeRandomMove(currentSticksInRow);  // Nếu nim_sum = 0, chọn ngẫu nhiên vì không có nước đi tối ưu
@@ -36,10 +36,10 @@ public class Machine {
         // Tìm hàng để tạo nim_sum = 0
         for (int i = 0; i < numberOfRows; i++) {
             int heap = currentSticksInRow[i];
-            int target = heap ^ nimSum;  // Số que còn lại trong đống nếu tạo nim_sum = 0
+            int target = heap ^ nimSum;  // Số que cần lấy trong đống để tạo nim_sum = 0
 
-            if (target < heap) {
-                return new int[]{i + 1, heap - target};  // Trả về hàng (1-based) và số que cần lấy
+            if (target <= heap) {
+                return new int[]{i + 1, heap - target};  // Trả về hàng thứ và số que cần lấy
             }
         }
         return makeRandomMove(currentSticksInRow);  // Nếu không có nước đi tối ưu, chọn ngẫu nhiên
@@ -70,7 +70,7 @@ public class Machine {
                 }
             }
             // Quyết định số que cần lấy để để lại số đống lẻ
-            int sticksToTake = currentSticksInRow[lastHeapWithMoreThanOne] - (remainingHeaps % 2 == 0 ? 0 : 1);
+            int sticksToTake = currentSticksInRow[lastHeapWithMoreThanOne] - 1;
             return new int[]{lastHeapWithMoreThanOne + 1, sticksToTake};
         }
         // Giai đoạn giữa và đầu: áp dụng chiến lược nim-sum
@@ -78,7 +78,7 @@ public class Machine {
             for (int i = 0; i < currentSticksInRow.length; i++) {
                 int heap = currentSticksInRow[i];
                 int target = heap ^ nimSum;
-                if (target < heap) {
+                if (target <= heap) {
                     return new int[]{i + 1, heap - target};
                 }
             }

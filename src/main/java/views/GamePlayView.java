@@ -475,20 +475,12 @@ public class GamePlayView extends javax.swing.JFrame {
 
     public void doHint(int currentRow, int disabledCount) {
         refresh(); // Làm mới giao diện
-        this.currentRow = currentRow; // Lưu hàng hiện tại
-        this.disabledCount = disabledCount; // Lưu số lượng que đã bị vô hiệu hóa
+        this.disabledCount = disabledCount;
         disableOtherRows(currentRow); // Vô hiệu hóa các hàng khác
-
-        if (spn_quatity.isEnabled()) {
-            List<JLabel> rowLabels = rows.get(currentRow);
-            for (JLabel label : rowLabels) {
-                if (label.isEnabled()) {
-                    label.setEnabled(false); // Vô hiệu hóa nhãn
-                    label.setBorder(BorderFactory.createLineBorder(Color.RED)); // Đổi viền thành đỏ
-                }
-            }
-            this.updateSPN_Quatity(); // Cập nhật giá trị cho spinner
-        }
+        this.updateSPN_Quatity();
+        int targetDisabled = disabledCount;
+        List<JLabel> rowLabels = rows.get(currentRow);
+        changeLabelStatus(rowLabels, targetDisabled, 0);
     }
 
 // Listener xử lý sự kiện click cho nhãn
@@ -513,7 +505,7 @@ public class GamePlayView extends javax.swing.JFrame {
                 // Cập nhật số lượng `disabled` của hàng và spinner
                 disabledCount++;
                 updateSPN_Quatity();
-            } else {
+            } else if (disabledCount > 0){
                 // Nếu nhãn đang disabled, khôi phục lại nó
                 disabledCount--;
                 label.setEnabled(true);
@@ -625,21 +617,16 @@ public class GamePlayView extends javax.swing.JFrame {
     }
 
     public void doTurn() {
-        if (spn_quatity.isEnabled() && currentRow != -1) {
+        if (currentRow != -1) {
             int targetDisabled = (int) spn_quatity.getValue(); // Lấy số lượng que mục tiêu
-            List<JLabel> rowLabels = rows.get(currentRow); // Lấy nhãn hàng hiện tại
+            List<JLabel> rowLabels = rows.get(currentRow); // Lấy số nhãn trên hàng
             int currentDisabledCount = disabledCount; // Lấy số lượng que đã bị vô hiệu hóa hiện tại
-
             changeLabelStatus(rowLabels, targetDisabled, currentDisabledCount); // Thay đổi trạng thái nhãn
-
-            // Gọi takeSticks dựa trên trạng thái mới
-            if (currentDisabledCount < targetDisabled || currentDisabledCount > targetDisabled) {
-                takeSticks(targetDisabled); // Lấy que theo số lượng mục tiêu
-            } else {
-                takeSticks(currentDisabledCount); // Lấy que theo số lượng hiện tại
-            }
+            // Gọi takeSticks thực hiện lấy que        
+            int toTake = (SticksInRow[currentRow] > targetDisabled) ? targetDisabled : SticksInRow[currentRow]; // Khi mục tiêu lấy quá lớn thì tự động lấy tối đa
+            takeSticks(toTake); // Lấy que theo số lượng mục tiêu
         } else {
-            takeSticks(disabledCount); // Lấy que theo số lượng đã bị vô hiệu hóa
+            takeSticks(0); // Lấy que theo số lượng mục tiêu
         }
     }
 
@@ -649,9 +636,10 @@ public class GamePlayView extends javax.swing.JFrame {
             int toDisable = targetDisabled - currentDisabledCount;
             for (JLabel label : rowLabels) {
                 if (label.isEnabled() && toDisable > 0) {
-                    label.setEnabled(false); // Vô hiệu hóa nhãn
+                    label.setEnabled(false); // Vô hiệu hóa nhãn              
                     label.setBorder(BorderFactory.createLineBorder(Color.RED)); // Đổi viền thành đỏ
                     toDisable--;
+                    this.disabledCount++;
                 }
                 if (toDisable == 0) {
                     return; // Thoát sau khi đạt mục tiêu
@@ -668,6 +656,7 @@ public class GamePlayView extends javax.swing.JFrame {
                     label.setEnabled(true); // Kích hoạt nhãn
                     label.setBorder(BorderFactory.createEmptyBorder()); // Khôi phục viền
                     toEnable--;
+                    this.disabledCount--;
                 }
                 if (toEnable == 0) {
                     return; // Thoát sau khi đạt mục tiêu

@@ -218,9 +218,9 @@ public class SaveModel {
         this.gameModel = gameModel;
         Path path = Paths.get("src/main/resources/database/Setting.txt"); // Đường dẫn đến tệp cài đặt
 
-        // Tạo tệp nếu chưa tồn tại
+        // Tạo thư mục nếu chưa tồn tại
         try {
-            Files.createDirectories(path.getParent());
+            Files.createDirectories(path.getParent());  
             if (!Files.exists(path)) {
                 Files.createFile(path);
             }

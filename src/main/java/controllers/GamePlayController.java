@@ -28,7 +28,7 @@ public class GamePlayController implements GamePlayInterface {
     private GamePlayView gamePlayView; // Giao diện trò chơi
     private NavigationInterface navigationInterface; // Giao diện điều hướng
     private Machine machine; // Điều khiển AI
-    private Boolean takesFirst; // Biến kiểm tra ai đi trước
+    private Boolean takesFirst; // Biến kiểm tra ai đi trước, true nếu là player 1 (người)
 
     public GamePlayController(GamePlayView gamePlayView, GameStateModel gameStateModel, PlayerModel player1, PlayerModel player2) {
         this.player1 = player1;
@@ -145,6 +145,7 @@ public class GamePlayController implements GamePlayInterface {
         saveModel.setPlayer2(player2);
         saveModel.setGameStateModel(gameStateModel);
         saveModel.setTakesFirst(takesFirst);
+        saveModel.saveGame();
     }
 
     private void deleteSaveGame() {
@@ -273,7 +274,7 @@ public class GamePlayController implements GamePlayInterface {
         // Thiết lập lại trò chơi để chơi lại
         player1.setCanTake(takesFirst);
         player2.setCanTake(!takesFirst);
-        setPriorities(); // Thiết lập ưu tiên lượt chơi
         gameStateModel.restore(); // Khôi phục trạng thái trò chơi
+        setPriorities(); // Thiết lập ưu tiên lượt chơi     
     }
 }

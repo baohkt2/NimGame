@@ -22,7 +22,7 @@ public class HomeView extends javax.swing.JFrame {
 
     public HomeView() {
         initComponents();
-        this.setLocationRelativeTo(null);
+        this.setLocationRelativeTo(null);   // Đặt giao diện xuất hiện giữa màn hình
         this.layerGameMode.setVisible(false);
         this.layerExit.setVisible(false);
         this.layerSetting.setVisible(false);
@@ -273,6 +273,7 @@ public class HomeView extends javax.swing.JFrame {
         btn_continue.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
         btn_continue.setText("CONTINUE");
         btn_continue.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn_continue.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btn_continue.setFocusPainted(false);
         btn_continue.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -291,6 +292,7 @@ public class HomeView extends javax.swing.JFrame {
         btn_setting.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
         btn_setting.setText("SETTING");
         btn_setting.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn_setting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btn_setting.setFocusable(false);
         btn_setting.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -309,6 +311,7 @@ public class HomeView extends javax.swing.JFrame {
         btn_exit.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
         btn_exit.setText("EXIT");
         btn_exit.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn_exit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btn_exit.setFocusPainted(false);
         btn_exit.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -507,7 +510,6 @@ public class HomeView extends javax.swing.JFrame {
         // TODO add your handling code here:
         this.layerGameMode.setVisible(true);
         this.layerMenu.setVisible(false);
-
     }//GEN-LAST:event_btn_newgameMouseClicked
 
     private void backHome() {
